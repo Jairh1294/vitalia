@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitalia — Consultorio & Farmacia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0d2818;          /* verde casi negro, texto */
+    --pine:#16432c;         /* verde pino profundo */
+    --emerald:#1f7a4d;      /* verde salud principal */
+    --leaf:#34b673;         /* verde vivo, acentos */
+    --mint:#d7f0e1;         /* menta clara */
+    --mist:#f4faf6;         /* fondo brumoso */
+    --cream:#fbfdfb;        /* casi blanco */
+    --gold:#c9a24b;         /* dorado sobrio, premium */
+    --shadow:rgba(13,40,24,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Outfit',sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;line-height:1.1;letter-spacing:-.02em}
+
+  /* ── NAV ─────────────────────────────── */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1.1rem 2.5rem;
+    background:rgba(251,253,251,.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid transparent;
+    transition:border-color .4s,padding .4s,box-shadow .4s;
+  }
+  nav.scrolled{border-bottom-color:var(--mint);box-shadow:0 4px 30px var(--shadow);padding:.8rem 2.5rem}
+  .brand{display:flex;align-items:center;gap:.6rem;font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;color:var(--pine)}
+  .brand .mark{width:34px;height:34px;flex:none}
+  .nav-links{display:flex;gap:2rem;align-items:center}
+  .nav-links a{color:var(--ink);text-decoration:none;font-size:.92rem;font-weight:500;opacity:.75;transition:opacity .25s}
+  .nav-links a:hover{opacity:1}
+  .nav-cta{
+    background:var(--emerald);color:#fff!important;opacity:1!important;
+    padding:.6rem 1.3rem;border-radius:100px;font-weight:600;
+    transition:transform .25s,box-shadow .25s;
+    box-shadow:0 6px 20px rgba(31,122,77,.3);
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(31,122,77,.42)}
+  .nav-toggle{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px}
+  .nav-toggle span{width:24px;height:2px;background:var(--pine);transition:.3s}
+
+  /* ── HERO ────────────────────────────── */
+  .hero{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;
+    padding:7rem 2.5rem 4rem;
+    background:
+      radial-gradient(1100px 700px at 85% -5%,rgba(52,182,115,.16),transparent 60%),
+      radial-gradient(900px 600px at 0% 110%,rgba(22,67,44,.1),transparent 55%),
+      var(--mist);
+    overflow:hidden;
+  }
+  .hero-grid{
+    max-width:1200px;margin:0 auto;width:100%;
+    display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--emerald);margin-bottom:1.5rem;
+    opacity:0;transform:translateY(20px);animation:rise .8s .1s forwards;
+  }
+  .eyebrow::before{content:"";width:28px;height:1.5px;background:var(--leaf)}
+  .hero h1{
+    font-size:clamp(2.6rem,6vw,4.6rem);color:var(--ink);margin-bottom:1.4rem;
+  }
+  .hero h1 .accent{
+    font-style:italic;color:var(--emerald);position:relative;
+  }
+  .hero h1 .word{display:inline-block;opacity:0;transform:translateY(28px);animation:rise .9s forwards}
+  .hero p.lead{
+    font-size:1.15rem;color:#3a5345;max-width:30rem;margin-bottom:2.2rem;
+    opacity:0;transform:translateY(20px);animation:rise .9s .7s forwards;
+  }
+  .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;transform:translateY(20px);animation:rise .9s .85s forwards}
+  .btn-primary{
+    background:var(--emerald);color:#fff;border:none;cursor:pointer;
+    padding:1rem 2rem;border-radius:100px;font-family:'Outfit';font-size:1rem;font-weight:600;
+    text-decoration:none;display:inline-flex;align-items:center;gap:.6rem;
+    box-shadow:0 10px 30px rgba(31,122,77,.32);
+    transition:transform .3s,box-shadow .3s;
+  }
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(31,122,77,.45)}
+  .btn-primary .arrow{transition:transform .3s}
+  .btn-primary:hover .arrow{transform:translateX(5px)}
+  .btn-ghost{
+    background:transparent;color:var(--pine);border:1.5px solid var(--mint);
+    padding:1rem 1.8rem;border-radius:100px;font-family:'Outfit';font-size:1rem;font-weight:600;
+    text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;
+    transition:border-color .3s,background .3s;
+  }
+  .btn-ghost:hover{border-color:var(--leaf);background:rgba(52,182,115,.06)}
+
+  /* Hero visual: tarjeta con cruz viva */
+  .hero-visual{position:relative;display:flex;justify-content:center;align-items:center;
+    opacity:0;transform:scale(.92);animation:pop 1s .5s forwards}
+  .pulse-card{
+    position:relative;width:330px;height:400px;border-radius:32px;
+    background:linear-gradient(160deg,var(--pine),var(--emerald));
+    box-shadow:0 30px 70px rgba(22,67,44,.4);
+    overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;
+    padding:2rem;
+  }
+  .pulse-card::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.18),transparent 50%);
+  }
+  .cross{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:120px;height:120px;
+  }
+  .cross span{position:absolute;background:rgba(255,255,255,.95);border-radius:8px;box-shadow:0 0 30px rgba(215,240,225,.6)}
+  .cross .v{width:34px;height:120px;left:43px;top:0}
+  .cross .h{width:120px;height:34px;left:0;top:43px}
+  .cross-ring{
+    position:absolute;top:50%;left:50%;width:120px;height:120px;
+    border:2px solid rgba(215,240,225,.5);border-radius:50%;
+    transform:translate(-50%,-50%);animation:ringpulse 2.6s ease-out infinite;
+  }
+  .cross-ring:nth-child(2){animation-delay:1.3s}
+  .pulse-card .tag{position:relative;color:rgba(255,255,255,.9);font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+  .pulse-card .ecg{position:relative;width:100%;height:40px}
+  .ecg svg{width:100%;height:100%}
+  .ecg path{stroke:var(--mint);stroke-width:2.5;fill:none;stroke-dasharray:300;stroke-dashoffset:300;animation:trace 3s linear infinite}
+  .float-pill{
+    position:absolute;background:#fff;border-radius:16px;padding:.8rem 1.1rem;
+    box-shadow:0 14px 36px var(--shadow);display:flex;align-items:center;gap:.6rem;
+    font-size:.85rem;font-weight:600;color:var(--pine);
+  }
+  .float-pill .dot{width:10px;height:10px;border-radius:50%;background:var(--leaf);box-shadow:0 0 0 4px rgba(52,182,115,.2)}
+  .fp1{top:8%;left:-8%;animation:floaty 4s ease-in-out infinite}
+  .fp2{bottom:10%;right:-10%;animation:floaty 4s ease-in-out 2s infinite}
+
+  /* ── MARQUEE de confianza ────────────── */
+  .trust{background:var(--pine);padding:1.1rem 0;overflow:hidden;white-space:nowrap}
+  .trust-track{display:inline-flex;gap:3.5rem;animation:slide 26s linear infinite;will-change:transform}
+  .trust-track span{color:rgba(215,240,225,.78);font-size:.92rem;font-weight:500;letter-spacing:.04em;display:inline-flex;align-items:center;gap:.7rem}
+  .trust-track span::before{content:"✚";color:var(--leaf);font-size:.8rem}
+
+  /* ── SECCIONES ───────────────────────── */
+  section{padding:6.5rem 2.5rem}
+  .container{max-width:1140px;margin:0 auto}
+  .section-head{text-align:center;max-width:42rem;margin:0 auto 4rem}
+  .section-head .eyebrow{margin-bottom:1rem;justify-content:center}
+  .section-head .eyebrow::before{display:none}
+  .section-head h2{font-size:clamp(2rem,4.5vw,3rem);color:var(--ink);margin-bottom:1rem}
+  .section-head p{color:#4a6356;font-size:1.08rem}
+
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+  .reveal.in{opacity:1;transform:none}
+
+  /* Servicios */
+  .services{background:var(--cream)}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
+  .svc{
+    background:#fff;border:1px solid var(--mint);border-radius:24px;padding:2.2rem;
+    transition:transform .4s,box-shadow .4s,border-color .4s;position:relative;overflow:hidden;
+  }
+  .svc::after{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--leaf),var(--emerald));transform:scaleX(0);transform-origin:left;transition:transform .4s}
+  .svc:hover{transform:translateY(-8px);box-shadow:0 24px 50px var(--shadow);border-color:transparent}
+  .svc:hover::after{transform:scaleX(1)}
+  .svc-icon{width:56px;height:56px;border-radius:16px;background:var(--mint);display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;font-size:1.5rem;transition:transform .4s}
+  .svc:hover .svc-icon{transform:scale(1.1) rotate(-6deg)}
+  .svc h3{font-size:1.3rem;color:var(--pine);margin-bottom:.7rem}
+  .svc p{color:#4a6356;font-size:.96rem}
+
+  /* Franja farmacia con stats */
+  .pharma{background:linear-gradient(150deg,var(--pine),var(--ink));color:var(--cream);border-radius:0}
+  .pharma .container{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+  .pharma h2{color:#fff;font-size:clamp(2rem,4vw,2.8rem);margin-bottom:1.2rem}
+  .pharma p{color:rgba(215,240,225,.82);font-size:1.05rem;margin-bottom:2rem}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+  .stat{background:rgba(255,255,255,.06);border:1px solid rgba(215,240,225,.16);border-radius:20px;padding:1.6rem}
+  .stat .num{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:600;color:var(--leaf);line-height:1}
+  .stat .lbl{color:rgba(215,240,225,.8);font-size:.9rem;margin-top:.4rem}
+
+  /* Cómo funciona (pasos reales = numerados con sentido) */
+  .steps{background:var(--mist)}
+  .step-row{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;counter-reset:step}
+  .step{position:relative;padding-top:2rem}
+  .step .n{font-family:'Fraunces',serif;font-size:3.2rem;font-weight:600;color:var(--leaf);opacity:.4;line-height:1}
+  .step h3{font-size:1.25rem;color:var(--pine);margin:.6rem 0}
+  .step p{color:#4a6356;font-size:.96rem}
+  .step::before{content:"";position:absolute;top:2.6rem;right:-1rem;width:2rem;height:2px;background:var(--mint)}
+  .step:last-child::before{display:none}
+
+  /* ── CTA AGENDAR (la estrella) ───────── */
+  .book{padding:7rem 2.5rem}
+  .book-card{
+    max-width:1000px;margin:0 auto;position:relative;
+    background:linear-gradient(150deg,var(--emerald),var(--pine));
+    border-radius:36px;padding:4.5rem 3rem;text-align:center;overflow:hidden;
+    box-shadow:0 40px 90px rgba(22,67,44,.4);
+  }
+  .book-card::before{content:"";position:absolute;top:-50%;left:-20%;width:140%;height:200%;
+    background:radial-gradient(circle,rgba(52,182,115,.25),transparent 60%);animation:rotate 18s linear infinite}
+  .book-card>*{position:relative}
+  .book-card .eyebrow{color:var(--mint);justify-content:center;margin-bottom:1.2rem}
+  .book-card .eyebrow::before{background:var(--leaf)}
+  .book-card h2{color:#fff;font-size:clamp(2rem,4.5vw,3.2rem);margin-bottom:1rem}
+  .book-card p{color:rgba(215,240,225,.9);font-size:1.12rem;max-width:34rem;margin:0 auto 2.5rem}
+  .btn-book{
+    background:#fff;color:var(--pine);border:none;cursor:pointer;
+    padding:1.15rem 2.6rem;border-radius:100px;font-family:'Outfit';font-size:1.08rem;font-weight:700;
+    text-decoration:none;display:inline-flex;align-items:center;gap:.7rem;
+    transition:transform .3s,box-shadow .3s;box-shadow:0 14px 40px rgba(0,0,0,.2);
+  }
+  .btn-book:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,.3)}
+  .btn-book .arrow{transition:transform .3s}
+  .btn-book:hover .arrow{transform:translateX(6px)}
+  .book-note{color:rgba(215,240,225,.7);font-size:.88rem;margin-top:1.4rem}
+
+  /* ── FOOTER ──────────────────────────── */
+  footer{background:var(--ink);color:rgba(215,240,225,.7);padding:3.5rem 2.5rem 2rem}
+  .foot-grid{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(215,240,225,.12)}
+  .foot-brand{display:flex;align-items:center;gap:.6rem;font-family:'Fraunces',serif;font-size:1.4rem;color:#fff;margin-bottom:1rem}
+  .foot-brand .mark{width:32px;height:32px}
+  .foot-col h4{color:#fff;font-family:'Outfit';font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;font-weight:600}
+  .foot-col a{display:block;color:rgba(215,240,225,.7);text-decoration:none;font-size:.92rem;margin-bottom:.6rem;transition:color .25s}
+  .foot-col a:hover{color:var(--leaf)}
+  .foot-bottom{max-width:1140px;margin:1.5rem auto 0;text-align:center;font-size:.85rem;color:rgba(215,240,225,.5)}
+
+  /* ── ANIMACIONES ─────────────────────── */
+  @keyframes rise{to{opacity:1;transform:none}}
+  @keyframes pop{to{opacity:1;transform:scale(1)}}
+  @keyframes ringpulse{0%{width:120px;height:120px;opacity:.7}100%{width:280px;height:280px;opacity:0}}
+  @keyframes trace{to{stroke-dashoffset:-300}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes slide{to{transform:translateX(-50%)}}
+  @keyframes rotate{to{transform:rotate(360deg)}}
+
+  /* ── RESPONSIVE ──────────────────────── */
+  @media(max-width:880px){
+    .nav-links{position:fixed;top:64px;left:0;right:0;flex-direction:column;background:var(--cream);
+      padding:1.5rem;gap:1.2rem;border-bottom:1px solid var(--mint);transform:translateY(-150%);transition:transform .4s;box-shadow:0 20px 40px var(--shadow)}
+    .nav-links.open{transform:none}
+    .nav-toggle{display:flex}
+    .hero-grid{grid-template-columns:1fr;text-align:center}
+    .eyebrow,.section-head .eyebrow{justify-content:center}
+    .hero p.lead{margin-left:auto;margin-right:auto}
+    .hero-actions{justify-content:center}
+    .hero-visual{margin-top:1rem}
+    .svc-grid{grid-template-columns:1fr}
+    .pharma .container{grid-template-columns:1fr;gap:2.5rem}
+    .step-row{grid-template-columns:1fr;gap:1.5rem}
+    .step::before{display:none}
+    .foot-grid{grid-template-columns:1fr;gap:2rem}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    .eyebrow,.hero h1 .word,.hero p.lead,.hero-actions,.hero-visual{opacity:1!important;transform:none!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="brand">
+    <svg class="mark" viewBox="0 0 40 40" fill="none">
+      <rect x="2" y="2" width="36" height="36" rx="11" fill="#16432c"/>
+      <path d="M20 10v20M10 20h20" stroke="#34b673" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="14" stroke="#d7f0e1" stroke-width="1.5" opacity=".4"/>
+    </svg>
+    Vitalia
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#servicios">Servicios</a>
+    <a href="#farmacia">Farmacia</a>
+    <a href="#como">Cómo funciona</a>
+    <a href="#agendar" class="nav-cta">Agendar cita</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Consultorio &amp; Farmacia</span>
+      <h1>
+        <span class="word" style="animation-delay:.2s">Tu salud,</span>
+        <span class="word" style="animation-delay:.35s">atendida</span>
+        <span class="word accent" style="animation-delay:.5s">de principio</span>
+        <span class="word accent" style="animation-delay:.62s">a fin.</span>
+      </h1>
+      <p class="lead">Consulta médica y farmacia en un mismo lugar. Agenda en línea, recibe tu receta digital y surte tus medicamentos sin filas ni esperas.</p>
+      <div class="hero-actions">
+        <a href="#agendar" class="btn-primary">Agendar mi cita <span class="arrow">→</span></a>
+        <a href="#servicios" class="btn-ghost">Conocer servicios</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="float-pill fp1"><span class="dot"></span> Cita confirmada</div>
+      <div class="float-pill fp2"><span class="dot"></span> Receta lista</div>
+      <div class="pulse-card">
+        <span class="tag">Vitalia · Salud integral</span>
+        <div class="cross-ring"></div>
+        <div class="cross-ring"></div>
+        <div class="cross">
+          <span class="v"></span><span class="h"></span>
+        </div>
+        <div class="ecg">
+          <svg viewBox="0 0 300 40" preserveAspectRatio="none">
+            <path d="M0,20 L60,20 L75,20 L85,5 L95,35 L105,20 L140,20 L150,12 L160,28 L170,20 L300,20"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRUST MARQUEE -->
+<div class="trust">
+  <div class="trust-track">
+    <span>Atención el mismo día</span><span>Recetas digitales</span><span>Farmacia surtida</span>
+    <span>Médicos certificados</span><span>Historial seguro</span><span>Agenda en línea 24/7</span>
+    <span>Atención el mismo día</span><span>Recetas digitales</span><span>Farmacia surtida</span>
+    <span>Médicos certificados</span><span>Historial seguro</span><span>Agenda en línea 24/7</span>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Lo que ofrecemos</span>
+      <h2>Cuidado completo, sin complicaciones</h2>
+      <p>Desde la consulta hasta el medicamento en tu mano, todo bajo un mismo techo y conectado digitalmente.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc reveal">
+        <div class="svc-icon">🩺</div>
+        <h3>Consulta médica</h3>
+        <p>Atención general y especializada con médicos certificados. Agenda en línea y elige a tu doctor de preferencia.</p>
+      </div>
+      <div class="svc reveal" style="transition-delay:.1s">
+        <div class="svc-icon">💊</div>
+        <h3>Farmacia integrada</h3>
+        <p>Surte tu receta al instante en nuestra farmacia. Medicamentos de patente y genéricos, siempre en existencia.</p>
+      </div>
+      <div class="svc reveal" style="transition-delay:.2s">
+        <div class="svc-icon">📋</div>
+        <h3>Receta digital</h3>
+        <p>Recibe tu receta en formato digital con folio único. Sin papeles que perder, lista para surtir o enviar.</p>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-icon">📅</div>
+        <h3>Agenda en línea</h3>
+        <p>Solicita tu cita en segundos desde cualquier dispositivo, a cualquier hora. Te confirmamos por WhatsApp.</p>
+      </div>
+      <div class="svc reveal" style="transition-delay:.1s">
+        <div class="svc-icon">🔒</div>
+        <h3>Historial seguro</h3>
+        <p>Tu expediente y tus datos protegidos con cifrado. Solo tu médico tiene acceso a tu información clínica.</p>
+      </div>
+      <div class="svc reveal" style="transition-delay:.2s">
+        <div class="svc-icon">⚡</div>
+        <h3>Atención ágil</h3>
+        <p>Menos filas, menos esperas. Nuestro sistema conecta consulta y farmacia para que salgas con todo resuelto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FARMACIA + STATS -->
+<section class="pharma" id="farmacia">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--leaf)">Farmacia Vitalia</span>
+      <h2>El medicamento correcto, justo cuando lo necesitas</h2>
+      <p>Nuestra farmacia trabaja de la mano con el consultorio. En cuanto tu médico genera la receta, ya está lista para surtirse. Sin traslados, sin buscar en otro lado.</p>
+      <a href="#agendar" class="btn-primary">Agendar y surtir <span class="arrow">→</span></a>
+    </div>
+    <div class="stats reveal" style="transition-delay:.15s">
+      <div class="stat"><div class="num">1</div><div class="lbl">Consulta y farmacia en un solo lugar</div></div>
+      <div class="stat"><div class="num">24/7</div><div class="lbl">Agenda disponible en línea</div></div>
+      <div class="stat"><div class="num">100%</div><div class="lbl">Recetas digitales con folio</div></div>
+      <div class="stat"><div class="num">0</div><div class="lbl">Filas para surtir tu receta</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="steps" id="como">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Tres pasos hasta tu medicamento</h2>
+      <p>El proceso es lineal y por eso lo numeramos: cada paso lleva al siguiente sin que tengas que repetir nada.</p>
+    </div>
+    <div class="step-row">
+      <div class="step reveal">
+        <div class="n">01</div>
+        <h3>Agenda tu cita</h3>
+        <p>Entra al portal, llena tus datos y elige fecha y doctor. Recibes confirmación en minutos.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.12s">
+        <div class="n">02</div>
+        <h3>Acude a consulta</h3>
+        <p>Tu médico te atiende y genera tu receta digital al momento, con todos tus medicamentos.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.24s">
+        <div class="n">03</div>
+        <h3>Surte en farmacia</h3>
+        <p>Pasa a nuestra farmacia con tu receta lista y sal con tus medicamentos en mano.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA AGENDAR -->
+<section class="book" id="agendar">
+  <div class="book-card reveal">
+    <span class="eyebrow">Agenda en línea</span>
+    <h2>Tu cita está a un clic</h2>
+    <p>Reserva tu consulta ahora mismo. Sin llamadas, sin esperas. Elige el día, la hora y tu doctor de preferencia.</p>
+    <a href="https://hmfernando268-ctrl-sm-frontend-sand.vercel.app/consultorio-demo" class="btn-book" target="_blank" rel="noopener">
+      Agendar mi cita ahora <span class="arrow">→</span>
+    </a>
+    <p class="book-note">Atención el mismo día · Confirmación inmediata</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand">
+        <svg class="mark" viewBox="0 0 40 40" fill="none">
+          <rect x="2" y="2" width="36" height="36" rx="11" fill="#1f7a4d"/>
+          <path d="M20 10v20M10 20h20" stroke="#34b673" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        Vitalia
+      </div>
+      <p style="max-width:22rem;font-size:.92rem">Consultorio y farmacia integrados. Cuidamos tu salud de principio a fin, con tecnología que pone al paciente primero.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Navegación</h4>
+      <a href="#servicios">Servicios</a>
+      <a href="#farmacia">Farmacia</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#agendar">Agendar cita</a>
+    </div>
+    <div class="foot-col">
+      <h4>Contacto</h4>
+      <a href="#">55 0000 0000</a>
+      <a href="#">hola@vitalia.mx</a>
+      <a href="#">Lun a Sáb · 8:00–20:00</a>
+    </div>
+  </div>
+  <div class="foot-bottom">© 2026 Vitalia · Consultorio &amp; Farmacia. Todos los derechos reservados.</div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+
+  // Mobile menu
+  const toggle=document.getElementById('navToggle'),links=document.getElementById('navLinks');
+  toggle.addEventListener('click',()=>links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>links.classList.remove('open')));
+
+  // Scroll reveal
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
